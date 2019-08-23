@@ -1,0 +1,36 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Category
+@{
+    ViewBag.Title = "Save";
+    Layout = "../Shared/_LOut.cshtml";
+    List<Category> categoryList = ViewBag.categories;
+}
+
+<table class="data" style="color: rebeccapurple;">
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+    </tr>
+    @foreach (Category category in categoryList)
+    {
+        <tr>
+            <td>@category.Id</td>
+            <td>@category.Name</td>
+            <td>
+
+                <form method="POST">
+
+
+                    <input type="hidden" value="@category.Id" id="Id" name="Id" />
+
+
+                    <input type="hidden" value="@category.Name" id="Name" name="Name" />
+
+                    <input type="submit" />
+
+                </form>
+            </td>
+        </tr>
+    }
+</table>
+

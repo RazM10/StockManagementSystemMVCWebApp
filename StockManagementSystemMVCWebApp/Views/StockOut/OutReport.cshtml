@@ -1,0 +1,140 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model StockOut
+@{
+    ViewBag.Title = "OutReport";
+    Layout = "../Shared/_LOut.cshtml";
+}
+
+@section style
+{
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet"/>
+<style>
+    label.error {
+        color: red;
+    }
+
+    .mainSectionTwo {
+        width: 775px;
+        float: right;
+    }
+
+    input[type="button"] {
+        background: #fff;
+        border-radius: 1px solid #fff;
+        color: rebeccapurple;
+        cursor: pointer;
+        font-size: 20px;
+        padding: 1px 10px;
+    }
+
+        input[type="button"]:hover {
+            background: #FF7;
+        }
+</style>
+
+}
+
+<h2>Report</h2>
+<form id="infoForm">
+        <table class="data" style="color: rebeccapurple;">
+            <tr>
+                <td>
+                    <label for="fromDate">Form Date</label>
+                </td>
+                <td>
+                    <input id="fromDate" name="fromDate" type="text" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="toDate">To Date</label>
+                </td>
+                <td>
+                    <input id="toDate" name="toDate" type="text" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input id="btnForm" value="Show" type="button" />
+                </td>
+            </tr>
+        </table>
+
+    </form>
+
+<table id="myTable" class="data" style="color: rebeccapurple;"></table>
+    <div id="out" style="color: Red;"></div>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+
+<script>
+            $('#fromDate').datepicker({
+                daysOfWeekHighlighted: "5",
+                autoclose: true,
+                format: "yyyy-mm-dd"
+            });
+
+            $('#toDate').datepicker({
+                daysOfWeekHighlighted: "5",
+                autoclose: true,
+                format: "yyyy-mm-dd"
+            });
+
+            $(document).ready(function () {
+                $("#btnForm").click(function () {
+
+                    var fdate = $("#fromDate").val();
+                    var tdate = $("#toDate").val();
+
+
+
+                    var json = { fodate: fdate, todate: tdate };
+                    if (fdate !== "" && tdate !== "") {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetReportByDates", "StockOut")',
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(json),
+                            success: function (data) {
+
+                                $("#myTable").empty();
+                                $("#out").text("");
+                                //Console.log("Here");
+                                $("#myTable").append('<tr><td>ItemId</td><td>Quantity</td></tr>');
+
+                                $.each(data, function (key, value) {
+
+
+
+                                    $("#myTable").append('<tr><td>' + value.ItemName + '</td><td>' + value.Quantity + '</td></tr>');
+
+                                });
+
+                            }
+                        });
+                    } else {
+                        alert("Fill the Fields..");
+                        $("#out").text("Fill the Fields..");
+                    }
+
+                    // Console.log("Here1");
+
+
+
+                });
+
+
+            });
+
+</script>
+}

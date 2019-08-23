@@ -1,0 +1,161 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Item
+@{
+    ViewBag.Title = "ReportTwo";
+    Layout = "../Shared/_LOut.cshtml";
+    List<Category> categoryList = ViewBag.categoryList;
+    List<Company> companyList = ViewBag.companyList;
+}
+
+@section style
+{
+    <style>
+        label.error {
+            color: red;
+        }
+
+        .selectS {
+            border: 1px solid #cfc516;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            padding: 5px;
+            width: 300px;
+        }
+
+        .mainSectionTwo {
+            width: 775px;
+            float: right;
+        }
+        
+        input[type="button"] {
+            background: #fff;
+            border-radius: 1px solid #fff;
+            color: rebeccapurple;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 1px 10px;
+        }
+        input[type="button"]:hover {
+                background: #FF7;
+            }
+    </style>
+}
+
+<h2>Search</h2>
+
+<form id="infoForm">
+    <table class="data" style="color: rebeccapurple;">
+        <tr>
+            <td>
+                <label for="CompanyId">Company</label>
+            </td>
+            <td>
+                <select class="selectS" id="CompanyId" name="CompanyId">
+                    <option value="">--Select--</option>
+                    @foreach (Company company in companyList)
+                    {
+                        <option value="@company.Id">@company.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="CategoryId">Category</label>
+            </td>
+            <td>
+                <select class="selectS" id="CategoryId" name="CategoryId">
+                    <option value="">--Select--</option>
+                    @foreach (Category category in categoryList)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="btnForm" class="btnForm" value="Show" type="button" /></td>
+        </tr>
+    </table>
+
+</form>
+
+<table id="myTable" class="data" style="color: rebeccapurple;"></table>
+    @*<table>
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+            </tr>
+        </thead>
+        <tbody id="myTable"></tbody>
+    </table>*@
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#infoForm").validate({
+        rules: {
+
+            CompanyId: "required",
+            CategoryId: "required"
+
+        },
+        messages: {
+
+
+            CompanyId: "Please select Company",
+            CategoryId: "Please select Category"
+
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#btnForm").click(function () {
+
+            var companyId = $("#CompanyId").val();
+            var categoryId = $("#CategoryId").val();
+
+
+            var json = { comId: companyId, cotId: categoryId };
+
+           // Console.log("Here1");
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetAllItemsForReportTwo", "Item")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+
+                    $("#myTable").empty();
+                    //Console.log("Here");
+                    $("#myTable").append('<tr><td>SL</td><td>Name</td><td>Company</td><td>Available Quantity</td></tr>');
+
+                    $.each(data, function (key, value) {
+
+
+
+                        $("#myTable").append('<tr><td>' + value.Sl + '</td><td>' + value.Name + '</td><td>' + value.CompanyName + '</td><td>' + value.AvailableQuantity + '</td></tr>');
+
+                    });
+
+                }
+            });
+
+        });
+
+
+    });
+</script>
+
+}
+
+

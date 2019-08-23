@@ -1,0 +1,179 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Item
+@{
+    ViewBag.Title = "SockIn";
+    Layout = "../Shared/_LOut.cshtml";
+    List<Company> companyList = ViewBag.companyList;
+}
+
+@section style
+{
+    <style>
+        label.error {
+            color: red;
+        }
+
+        .selectS {
+            border: 1px solid #cfc516;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            padding: 5px;
+            width: 300px;
+        }
+        .mainSectionTwo {
+            width: 775px;
+            float: right;
+        }
+        
+    </style>
+}
+
+
+<form method="POST" id="infoForm">
+    <table class="data" style="color: rebeccapurple;">
+        <tr>
+            <td>
+                <label for="CompanyId">Company</label>
+            </td>
+            <td>
+                <select class="selectS" id="CompanyId" name="CompanyId">
+                    <option value="">--Select--</option>
+                    @foreach (Company company in companyList)
+                    {
+                        <option value="@company.Id">@company.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Id">Item</label>
+            </td>
+            <td>
+                <select class="selectS" id="Id" name="Id">
+                    <option value="">--Select--</option>
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ReorderLevel">Reorder Level</label>
+            </td>
+            <td>
+                <input id="ReorderLevel" name="ReorderLevel" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="AvailableQuantity">Available Quantity</label>
+            </td>
+            <td>
+                <input id="AvailableQuantity" name="AvailableQuantity" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="StockQuantity">Stock In Quantity</label>
+            </td>
+            <td>
+                <input id="StockQuantity" name="StockQuantity" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" />
+            </td>
+        </tr>
+    </table>
+</form>
+    @if (ViewBag.message!=null)
+    {
+        <h3>@ViewBag.message</h3>
+    }
+
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#infoForm").validate({
+        rules: {
+            Id: "required",
+            CompanyId: "required",
+            StockQuantity: "required"
+
+        },
+        messages: {
+
+            Id: "Please select Item",
+            CompanyId: "Please selet Company",
+            StockQuantity: "Please enter Quantity"
+
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#CompanyId").change(function () {
+
+            var companyId = $("#CompanyId").val();
+
+
+            var json = { comId: companyId };
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetItemsByCompanyId", "Item")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+
+                    $("#Id").empty();
+                    $("#Id").append('<option value="">--SELECT--</option>');
+
+
+                    $.each(data, function (key, value) {
+
+                        $("#Id").append('<option value=' + value.Id + '>' + value.Name + '</option>');
+
+                    });
+
+                }
+            });
+
+        });
+
+        $("#Id").change(function () {
+
+            var iId = $("#Id").val();
+
+
+            var json = { id: iId };
+
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetInfoByItemId", "Item")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(json),
+                success: function (data) {
+
+                    $("#ReorderLevel").val(data.ReorderLevel);
+                    $("#AvailableQuantity").val(data.AvailableQuantity);
+
+
+
+                }
+            });
+
+        });
+    });
+</script>
+}

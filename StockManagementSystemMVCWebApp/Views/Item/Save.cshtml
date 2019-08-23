@@ -1,0 +1,151 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Item
+@{
+    ViewBag.Title = "Save";
+    Layout = "../Shared/_LOut.cshtml";
+    List<Category> categoryList = ViewBag.categoryList;
+    List<Company> companyList = ViewBag.companyList;
+    List<Item> itemList = ViewBag.itemList;
+    
+}
+
+@section style
+{
+    <style>
+        label.error {
+            color: red;
+        }
+        .selectS {
+            border: 1px solid #cfc516;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            padding: 5px;
+            width: 300px;
+        }
+        .mainSectionTwo {
+            width: 775px;
+            float: right;
+        }
+        
+    </style>
+}
+
+<h2>Item</h2>
+
+<form method="POST" id="infoForm">
+    <table class="data" style="color: rebeccapurple;">
+        <tr>
+            <td>
+                <label for="CategoryId">Category</label>
+            </td>
+            <td>
+                <select class="selectS" id="CategoryId" name="CategoryId">
+                    <option value="">--Select--</option>
+                    @foreach (Category category in categoryList)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="CompanyId">Company</label>
+            </td>
+            <td>
+                <select class="selectS" id="CompanyId" name="CompanyId">
+                    <option value="">--Select--</option>
+                    @foreach (Company company in companyList)
+                    {
+                        <option value="@company.Id">@company.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Name">Name</label>
+            </td>
+            <td>
+                <input id="Name" name="Name" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ReorderLevel">ReorderLevel</label>
+            </td>
+            <td>
+                <input id="ReorderLevel" name="ReorderLevel" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+    @if (ViewBag.message != null)
+    {
+        <h2>@ViewBag.message</h2>
+    }
+
+@*<table class="data" style="color: rebeccapurple;">
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Category</td>
+        <td>Company</td>
+        <td>Available</td>
+    </tr>
+    @foreach (Item item in itemList)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>@item.CategoryId</td>
+            <td>@item.CompanyId</td>
+            <td>@item.AvailableQuantity</td>
+        </tr>
+    }
+</table>*@
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#infoForm").validate({
+        rules: {
+            Name: {
+                required: true,
+                maxlength: 15,
+                minlength: 4
+            },
+            CategoryId: "required",
+            CompanyId: "required",
+            ReorderLevel: "required"
+
+        },
+        messages: {
+            Name: {
+                required: "Please enter Name",
+                maxlength: "Name can't exceed 15 characters",
+                minlength: "Name minimun length 4"
+            },
+            CategoryId: "Please select Category",
+            CompanyId: "Please selet Company",
+            ReorderLevel: "Please enter ReorderLevel"
+
+        }
+    });
+</script>
+}
+
+
+
+

@@ -1,0 +1,48 @@
+<html>
+<head>
+
+
+</head>
+<body>
+
+<input type="text" id="p" name="p">
+<div id="q"></div>
+
+<form>
+	<input type="text" name="Name" id="Name">
+	<input type="text" name="Roll" id="Roll">
+	<input type="button" value="submit" onclick="submitbutton()">
+</form>
+
+<form method="POST">
+	<table id="myTable" style="display:none;border:1px solid #000000;"></table>
+	<input type="submit">
+</form>
+
+<script src="jquery-3.3.1.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" >
+//$(document).ready(function() {
+function submitbutton()
+{
+  var name = $("#Name").val();
+  var roll = $("#Roll").val();
+  $("#Name").val("");
+  $("#Roll").val('');
+  console.log(name);
+  $('#myTable').append('<tr><td>'+name+'</td><td>'+roll+'</td></tr>');
+  
+  /*$('#myTable').append('<tr><td>my data</td><td>more data</td></tr>');
+  $('#myTable').append('<tr><td>my data</td><td>more data</td></tr>');
+  $('#myTable').append('<tr><td>my data</td><td>more data</td></tr>');
+  $('#myTable').append('<tr><td>my data</td><td>more data</td></tr>');*/
+  
+  $('#myTable').show();
+  $('#p').val(name);
+  $('#q').text(roll);
+ }
+//});
+
+</script>
+</body>
+</html>

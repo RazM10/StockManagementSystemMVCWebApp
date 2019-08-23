@@ -1,0 +1,108 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Item
+@{
+    ViewBag.Title = "Report";
+    Layout = null;
+    List<Category> categoryList = ViewBag.categoryList;
+    List<Company> companyList = ViewBag.companyList;
+    List<Item> itemList = ViewBag.itemList;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        label.error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" id="infoForm">
+        <table>
+            <tr>
+                <td>
+                    <label for="CompanyId">Company</label>
+                </td>
+                <td>
+                    <select id="CompanyId" name="CompanyId">
+                        <option value="">--Select--</option>
+                        @foreach (Company company in companyList)
+                        {
+                            <option value="@company.Id">@company.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="CategoryId">Category</label>
+                </td>
+                <td>
+                    <select id="CategoryId" name="CategoryId">
+                        <option value="">--Select--</option>
+                        @foreach (Category category in categoryList)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" /></td>
+            </tr>
+        </table>
+
+    </form>
+
+    @if (itemList != null)
+    {
+        <table>
+            <tr>
+                <td>SL</td>
+                <td>Item</td>
+                <td>Available Quantity</td>
+                <td>Reorder Level</td>
+            </tr>
+            @foreach (Item item in itemList)
+            {
+                <tr>
+                    <td>@item.Sl</td>
+                    <td>@item.Name</td>
+                    <td>@item.AvailableQuantity</td>
+                    <td>@item.ReorderLevel</td>
+                </tr>
+            }
+        </table>
+    }
+    @if (ViewBag.message != null)
+    {
+        <h2>@ViewBag.message</h2>
+    }
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $("#infoForm").validate({
+            rules: {
+                
+                CategoryId: "required",
+                CompanyId: "required"
+
+            },
+            messages: {
+                
+                CategoryId: "Please select Category",
+                CompanyId: "Please selet Company"
+
+            }
+        });
+    </script>
+
+</body>
+</html>

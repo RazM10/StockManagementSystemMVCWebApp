@@ -1,0 +1,56 @@
+﻿@model StockManagementSystemMVCWebApp.Models.Category
+@{
+    ViewBag.Title = "Update";
+    Layout = "../Shared/_LOut.cshtml";
+}
+
+@section style
+{
+    <style>
+        label.error {
+            color: red;
+        }
+    </style>
+}
+<h2>Update Category</h2>
+<form method="POST" id="signUpForm">
+    <table class="data">
+        <tr>
+            <td>
+                <label for="Name">Name</label>
+                <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            </td>
+            <td>
+                <input id="Name" name="Name" type="text" value="@Model.Name" />
+                @Html.ValidationMessage("Name")
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        $("#signUpForm").validate({
+            rules: {
+                Name: "required"
+
+            },
+            messages: {
+                Name: "Please enter Name"
+
+            }
+        });
+    </script>
+
+}

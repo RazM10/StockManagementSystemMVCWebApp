@@ -1,0 +1,82 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model Company
+@{
+    ViewBag.Title = "Save";
+    Layout = "../Shared/_LOut.cshtml";
+    List<Company> companyList = ViewBag.companyList;
+    
+}
+
+@section style
+{
+    <style>
+    label.error {
+        color: red;
+    }
+    </style>
+
+}
+<h2>Company</h2>
+<form method="POST" id="signUpForm">
+    <table class="data" style="color: rebeccapurple;">
+        <tr>
+            <td>
+                <label for="Name">Name</label>
+            </td>
+            <td>
+                <input id="Name" name="Name" type="text" />
+                @Html.ValidationMessage("Name")
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" />
+            </td>
+        </tr>
+    </table>
+    </form>
+    @if(ViewBag.message!=null){
+        <h3>@ViewBag.message</h3>
+    }
+
+<table class="data" style="color: rebeccapurple;">
+    <tr>
+        <td>SL</td>
+        <td>Name</td>
+        <td>Action</td>
+    </tr>
+    @foreach (Company company in companyList)
+    {
+        <tr>
+            <td>@company.Sl</td>
+            <td>@company.Name</td>
+            <td>@Html.ActionLink("Edit", "Update", new { id = company.Id, name = company.Name })</td>
+        </tr>
+    }
+</table>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#signUpForm").validate({
+        rules: {
+            Name: "required"
+
+        },
+        messages: {
+            Name: "Please enter Name"
+
+        }
+    });
+</script>
+
+}
+
+
+
+

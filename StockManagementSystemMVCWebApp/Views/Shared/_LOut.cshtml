@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/stylemvc.css" rel="stylesheet"/>
+    <style>
+        h2 {
+            color: black;
+        }
+    </style>
+    @RenderSection("style",required:false)
+</head>
+<body>
+    <div class="headerSection templete clear">
+        <h2>Stock Management System</h2>
+    </div>
+<div class="navSection templete">
+    <ul>
+        <li><a href="@Url.Action("Save","Category")">Category</a></li>
+        <li><a href="@Url.Action("Save","Company")">Company</a></li>
+        <li><a href="@Url.Action("Save","Item")">Item</a></li>
+        <li>
+            <a href="#">Stock</a>
+            <ul>
+                <li><a href="@Url.Action("SockIn", "Item")">Stock In</a></li>
+                <li><a href="@Url.Action("SaveNew", "StockOut")">Stock Out</a></li>
+            </ul>
+        </li>
+        <li><a href="@Url.Action("ReportTwo", "Item")">Search</a></li>
+        <li><a href="@Url.Action("OutReport", "StockOut")">Report</a></li>
+        <li><a href="@Url.Action("Signin", "Login")">Logout</a></li>
+    </ul>
+</div>
+
+    <div class="mainSection templete clear">
+        <div class="mainSectionTemp clear"></div>
+
+        <div class="mainSectionTwo clear">
+            @RenderBody()
+        </div>
+
+    </div>
+
+    <div class="footerSection templete clear">
+        <p class="clear">&copy; Copyright 2019.</p>
+    </div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+</body>
+</html>
