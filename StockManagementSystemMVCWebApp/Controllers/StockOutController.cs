@@ -83,5 +83,70 @@ namespace StockManagementSystemMVCWebApp.Controllers
             Item item = ItemManager.GetInfoByItemId(id);
             return Json(item);
         }
+
+        public ActionResult Save_Update()
+        {
+            ViewBag.companyList = CompanyManager.GetAllCompanys();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Save_Update(StockOut stockOut)
+        {
+            if (Session["OutList"] == null)
+            {
+                List<StockOut> s = new List<StockOut>();
+
+                //stockOut.ItemId = iId;
+                //stockOut.Quantity = quantity;
+                //stockOut.OutAction = oAction;
+                stockOut.ItemName = ItemManager.GetItemName(stockOut.ItemId);
+                stockOut.CompanyName = CompanyManager.GetCompanyName(stockOut.ItemId);
+
+
+                s.Add(stockOut);
+                Session["OutList"] = s;
+            }
+            else
+            {
+                stockOut.ItemName = ItemManager.GetItemName(stockOut.ItemId);
+                stockOut.CompanyName = CompanyManager.GetCompanyName(stockOut.ItemId);
+                var userList = (List<StockOut>)Session["OutList"];
+                userList.Add(stockOut);
+                Session["OutList"] = userList;
+
+            }
+            ViewBag.companyList = CompanyManager.GetAllCompanys();
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ListSave()
+        {
+            var userList = (List<StockOut>)Session["OutList"];
+            Session["OutList"] = null;
+            foreach (var stockOut in userList)
+            {
+                stockOut.Msg = StockOutManager.Save(stockOut);
+            }
+
+            return RedirectToAction("Save_Update");
+        }
+
+        public JsonResult GetInfoByItemId_Update(int id)
+        {
+            Item item = ItemManager.GetInfoByItemId(id);
+            if (Session["OutList"] != null)
+            {
+                List<StockOut> userList = (List<StockOut>)Session["OutList"];
+                foreach (StockOut stockOut in userList)
+                {
+                    if (item.Id==stockOut.ItemId)
+                    {
+                        item.AvailableQuantity = item.AvailableQuantity - stockOut.Quantity;
+                    }
+                }
+            }
+            return Json(item);
+        }
 	}
 }

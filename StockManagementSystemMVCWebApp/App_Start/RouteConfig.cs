@@ -16,7 +16,7 @@ namespace StockManagementSystemMVCWebApp
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "LoginController", action = "Sigin", id = UrlParameter.Optional }
+                defaults: new { controller = "Login", action = "Signin", id = UrlParameter.Optional }
             );
         }
     }

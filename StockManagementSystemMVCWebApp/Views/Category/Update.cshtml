@@ -17,11 +17,11 @@
     <table class="data">
         <tr>
             <td>
-                <label for="Name">Name</label>
+                <label for="Name" style="color:rebeccapurple;">Name</label>
                 <input type="hidden" id="Id" name="Id" value="@Model.Id" />
             </td>
             <td>
-                <input id="Name" name="Name" type="text" value="@Model.Name" />
+                <input id="Name" name="Name" type="text" value="@Model.Name"/>
                 @Html.ValidationMessage("Name")
             </td>
         </tr>

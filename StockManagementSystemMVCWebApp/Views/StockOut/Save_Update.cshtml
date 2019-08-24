@@ -1,0 +1,232 @@
+﻿@using StockManagementSystemMVCWebApp.Models
+@model StockOut
+@{
+    ViewBag.Title = "Save_Update";
+    List<StockOut> outs= (List<StockOut>)Session["OutList"];
+    Layout = "../Shared/_LOut.cshtml";
+    List<Company> companyList = ViewBag.companyList;
+}
+
+@section style
+{
+    <style>
+        label.error {
+            color: red;
+        }
+
+        .selectS {
+            border: 1px solid #cfc516;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            padding: 5px;
+            width: 300px;
+        }
+
+        .mainSectionTwo {
+            width: 775px;
+            float: right;
+        }
+
+        input[type="button"] {
+            background: #fff;
+            border-radius: 1px solid #fff;
+            color: rebeccapurple;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 1px 10px;
+        }
+
+            input[type="button"]:hover {
+                background: #FF7;
+            }
+    </style>
+}
+
+<h2>Stock Out</h2>
+<form id="infoForm" method="post">
+    <table class="data" style="color: rebeccapurple;">
+        <tr>
+            <td>
+                <label for="CompanyId">Company</label>
+            </td>
+            <td>
+                <select class="selectS" id="CompanyId" name="CompanyId">
+                    <option value="">--Select--</option>
+                    @foreach (Company company in companyList)
+                    {
+                        <option value="@company.Id">@company.Name</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ItemId">Item</label>
+            </td>
+            <td>
+                <select class="selectS" id="ItemId" name="ItemId">
+                    <option value="">--Select--</option>
+
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="ReorderLevel">Reorder Level</label>
+            </td>
+            <td>
+                <input id="ReorderLevel" name="ReorderLevel" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="AvailableQuantity">Available Quantity</label>
+            </td>
+            <td>
+                <input id="AvailableQuantity" name="AvailableQuantity" type="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="Quantity">Stock Out</label>
+            </td>
+            <td>
+                <input id="Quantity" name="Quantity" type="text" autocomplete="off"/>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>Action</td>
+            <td>
+                <input type="radio" name="OutAction" value="sell" checked />Sell
+                <input type="radio" name="OutAction" value="lost" />Lost
+                <input type="radio" name="OutAction" value="damage" />Damage
+
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Submit"/>
+            </td>
+
+        </tr>
+
+    </table>
+</form>
+
+@if (Session["OutList"] != null)
+{
+    using (Html.BeginForm("ListSave", "StockOut"))
+    {
+        <table class="table table-bordered table-hover" style="color: rebeccapurple;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (StockOut u in outs)
+                {
+                    <tr>
+                        <td>@u.ItemName</td>
+                        <td>@u.Quantity</td>
+                        <td>@u.OutAction</td>
+                    </tr>
+                }
+            
+            <tr>
+                <td></td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Save</button>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    }
+
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    
+    <script>
+        $("#infoForm").validate({
+            rules: {
+                CompanyId: "required",
+                ItemId: "required",
+                Quantity:"required"
+            },
+            messages: {
+                CompanyId: "Please select company",
+                ItemId: "Please select Item",
+                Quantity:"Please enter Quantity"
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#CompanyId").change(function() {
+
+                var companyId = $("#CompanyId").val();
+
+
+                var json = { comId: companyId };
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetItemsByCompanyId", "StockOut")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function(data) {
+
+                        $("#ItemId").empty();
+                        $("#ItemId").append('<option value="">--Select--</option>');
+
+
+                        $.each(data,
+                            function(key, value) {
+
+                                $("#ItemId").append('<option value=' + value.Id + '>' + value.Name + '</option>');
+
+                            });
+
+                    }
+                });
+
+            });
+            $("#ItemId").change(function () {
+
+                var iId = $("#ItemId").val();
+
+
+                var json = { id: iId };
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetInfoByItemId_Update", "StockOut")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(json),
+                    success: function (data) {
+
+                        $("#ReorderLevel").val(data.ReorderLevel);
+                        $("#AvailableQuantity").val(data.AvailableQuantity);
+
+
+                    }
+                });
+
+            });
+        });
+    </script>
+}

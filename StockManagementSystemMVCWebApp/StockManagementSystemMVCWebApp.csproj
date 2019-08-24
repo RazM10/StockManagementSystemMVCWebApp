@@ -219,6 +219,7 @@
     <Content Include="Views\Category\Update.cshtml" />
     <Content Include="Views\Company\Update.cshtml" />
     <Content Include="Views\Login\Signin.cshtml" />
+    <Content Include="Views\StockOut\Save_Update.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
