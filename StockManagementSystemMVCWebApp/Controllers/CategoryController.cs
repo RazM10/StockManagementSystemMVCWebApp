@@ -27,6 +27,8 @@ namespace StockManagementSystemMVCWebApp.Controllers
         [HttpGet]
         public ActionResult Save()
         {
+            Session["OutList"] = null;
+            
             ViewBag.categories = CategoryManager.GetAllCategories();
             return View();
         }
